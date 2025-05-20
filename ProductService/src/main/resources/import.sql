@@ -1,0 +1,5 @@
+INSERT INTO product (id, name, description, price, quantity, category) VALUES (1, 'Laptop Pro X', 'Potente laptop para trabajo y gaming', 1200.00, 15, 'Electrónica');
+INSERT INTO product (id, name, description, price, quantity, category) VALUES (2, 'Smartphone Z10', 'Teléfono inteligente con cámara de alta resolución', 800.00, 30, 'Electrónica');
+INSERT INTO product (id, name, description, price, quantity, category) VALUES (3, 'Silla Ergonómica', 'Silla diseñada para largas horas de trabajo', 150.00, 50, 'Muebles');
+INSERT INTO product (id, name, description, price, quantity, category) VALUES (4, 'Auriculares NoiseFree', 'Auriculares con cancelación de ruido', 120.00, 25, 'Accesorios');
+INSERT INTO product (id, name, description, price, quantity, category) VALUES (5, 'Libro de Programación', 'Guía completa para aprender Java', 35.00, 100, 'Libros');

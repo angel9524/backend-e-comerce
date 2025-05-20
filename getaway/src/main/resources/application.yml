@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: user-service
+            uri: lb://user-service
+            predicates:
+              - Path=/users/**
+          - id: product-service
+            uri: lb://product-service
+            predicates:
+              - Path=/products/**
+          - id: order-service
+            uri: lb://order-service
+            predicates:
+              - Path=/orders/**
+          - id: cart-service-route
+            uri: lb://cart-service
+            predicates:
+              - Path=/cart/**
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
