@@ -1,0 +1,92 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_DATABASE: db_default
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    ports:
+      - "27017:27017"
+    volumes:
+      - mdata:/data/db
+      - ./init.js:/docker-entrypoint-initdb.d/init.js
+    networks:
+      - backend
+  mysql:
+    image: mysql:latest
+    container_name: mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 0000
+      MYSQL_DATABASE: productos_db
+    volumes:
+      - mysqldata:/var/lib/mysql
+    networks:
+      - backend
+  order-service:
+    image: astro95/order-service
+    container_name: order-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://admin:admin123@mongo:27017/db_orders
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+  eureka-service:
+    image: astro95/eureka-server
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+    networks:
+      - backend
+  product-service:
+    image: astro95/product-service
+    container_name: product-service
+    ports:
+      - "8081:8081"
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: 0000
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATA_MYSQL_URI: jdbc:mysql://mysql:3306/productos_db
+    networks:
+      - backend
+  cart-service:
+    image: astro95/cart-service
+    container_name: cart-service
+    ports:
+      - "8082:8082"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+      SPRING_DATA_MONGODB_URI: mongodb://admin:admin123@mongo:27017/db_cart
+    networks:
+      - backend
+  user-service:
+    image: astro95/user-service
+    container_name: user-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://admin:admin123@mongo:27017/db_users
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+  gateway:
+    image: astro95/gateway
+    container_name: gateway
+    ports:
+      - "8085:8085"
+    environment:
+      EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - backend
+volumes:
+  mdata:
+  mysqldata:
+
+networks:
+  backend:
+    driver: bridge
